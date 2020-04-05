@@ -6,22 +6,22 @@ use warnings;
 my $ve_config_path = '/etc/vz/conf';
 
 our $openvz_plan_binding = {
-    '400'  => 'ovz-1',
-    '800'  => 'ovz-2',
+    '84'  => '10g',
+    '77'  => '1g',
 };
 
 my $plan_speed_binding = {
-    'ovz-1'   => '20000',
-    'ovz-2'   => '20000',
+    '10g'   => '20000',
+    '1g'   => '20000',
 };
 
-# Если не смогли определить, то лимит все равно выдать лимит, без лимита нельзя - на гигабитном линке это чревато
+# If you couldn’t determine, then the limit will still be issued a limit, you can’t without a limit - on a gigabit link this is fraught
 my $default_speed = "30000";
 
 sub get_speed_by_ctid {
     my $ve = shift;
 
-    # это служебный контейнер на Parallels Cloud Server
+    # this is a service container on Parallels Cloud Server
     if ($ve eq '1') {
         return $default_speed;
     }
@@ -42,12 +42,12 @@ sub get_speed_by_ctid {
     }
 
     # Конвертируем лимит памяти в мегабайты
-    my $memory_limit_in_megabytes = $memory_limit * 4096 / 1024 ** 2;
+    # my $memory_limit_in_megabytes = $memory_limit * 4096 / 1024 ** 2;
 
-    $plan_name = $openvz_plan_binding->{$memory_limit_in_megabytes};
+    $plan_name = $openvz_plan_binding->{$ve};
 
     unless ($plan_name) {
-        warn "Can't get plan name for $ve with memory limit: $memory_limit_in_megabytes\n";
+        warn "Can't get plan name for $ve \n";
         return $default_speed;
     }
 
