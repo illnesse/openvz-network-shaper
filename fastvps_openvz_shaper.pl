@@ -539,16 +539,16 @@ sub convert_to_hex {
 }
 
 sub get_main_network_interface {
-    my $main_interface = '';
+    my $main_interface = 'eth0';
 
-    my @route_show = `/sbin/ip route show`;
-    chomp @route_show;
-
-    for my $line (@route_show) {
-        if ($line =~ /default via \d+\.\d+\.\d+\.\d+ dev (\w+)/) {
-            $main_interface = $1;
-        }
-    }
+    # my @route_show = `/sbin/ip route show`;
+    # chomp @route_show;
+    #
+    # for my $line (@route_show) {
+    #     if ($line =~ /default via \d+\.\d+\.\d+\.\d+ dev (\w+)/) {
+    #         $main_interface = $1;
+    #     }
+    # }
 
     return $main_interface;
 }
