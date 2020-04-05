@@ -67,7 +67,7 @@ my $global_classid_counter = 10;
 my $global_filter_counter = 1;
 
 # здесь мы храним функцию получения скорости для VPS по CTID, она зовется: get_speed_by_ctid и получает 1 параметр - CTID
-my $config_file_path = '/etc/fastvps_openvz_shaper_config';
+my $config_file_path = 'fastvps_openvz_shaper_config';
 
 my $config_loading_result = do $config_file_path;
 

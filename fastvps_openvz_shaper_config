@@ -11,8 +11,8 @@ our $openvz_plan_binding = {
 };
 
 my $plan_speed_binding = {
-    '10g'   => '20000',
-    '1g'   => '20000',
+    '10g'   => '100000',
+    '1g'   => '100000',
 };
 
 # If you couldn’t determine, then the limit will still be issued a limit, you can’t without a limit - on a gigabit link this is fraught
