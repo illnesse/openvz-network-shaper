@@ -31,22 +31,13 @@ if ($hostname =~ /^evo0/ or $hostname =~ /^evo12/ or $hostname =~ /^evo10/) {
 
 my $shaper_disabled = 0;
 
-#if ($hostname =~ /^evo12/) {
-#    $shaper_disabled = 1;
-#}
-
-# Никакого шейпера для технод
-if ($hostname =~ m/^technode/) {
-    $shaper_disabled = 1;
-}
-
-# Хэш, в которому нас хранится маппинга CTID и номера класса, котрый ему соответствует
+# The hash in which we store CTID mapping and class numbers that correspond to it
 my $ctid_class_mapping = {};
 
-# А тут мы храним скорости в килобитах
+# And here we store speeds in kilobits
 my $ctid_speed_mapping = {};
 
-# our потому что может использоваться в конфиге 
+
 my $ve_config_path = '/etc/vz/conf';
 
 my $main_network_interface = get_main_network_interface();
@@ -58,21 +49,19 @@ unless ($main_network_interface) {
 
 my $internal_network_interface = 'venet0';
 
-my $DEBUG = 0;
+my $DEBUG = 1;
 
-# Счетчик для нумерации классов, увеличивается на 10 каждый раз
+# Counter for class numbering, incremented by 10 each time
 my $global_classid_counter = 10;
 
-# Счетчик для нумерации хендлов фильтров, увеличивается на единицу каждый раз 
+# Counter for numbering filter handles, incremented by one each time
 my $global_filter_counter = 1;
-
-# здесь мы храним функцию получения скорости для VPS по CTID, она зовется: get_speed_by_ctid и получает 1 параметр - CTID
 my $config_file_path = 'fastvps_openvz_shaper_config';
 
 my $config_loading_result = do $config_file_path;
 
 unless ($config_loading_result) {
-    die "Can't load conifg file $config_file_path";
+    die "can't load config file $config_file_path";
 }
 
 # В этот спец файлик мы будем сохранять маппинг номеров CTID и соотвествующих им номеров хендлов классов
@@ -108,7 +97,7 @@ sub execute {
     my $output = `$command 2>&1`;
 
     if ($?) {
-        warn "Cammand '$command' failed with error:\n$output\n";
+        warn "Command '$command' failed with error:\n$output\n";
         return 0;
     }
 
