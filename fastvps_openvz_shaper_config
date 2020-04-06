@@ -7,16 +7,16 @@ my $ve_config_path = '/etc/vz/conf';
 
 our $openvz_plan_binding = {
     '85'  => '10g',
-    '77'  => '1g',
-    '79'  => '1g',
+    '77'  => '10g',
+    '79'  => '10g',
 };
 
 my $plan_speed_binding = {
-    '10g'   => '100000',
-    '1g'   => '100000',
+    '10g'   => '4096',
+    '1g'   => '4096',
 };
 
-my $default_speed = "30000";
+my $default_speed = "4096";
 
 sub get_speed_by_ctid {
     my $ve = shift;
