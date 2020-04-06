@@ -6,8 +6,9 @@ use warnings;
 my $ve_config_path = '/etc/vz/conf';
 
 our $openvz_plan_binding = {
-    '84'  => '10g',
+    '85'  => '10g',
     '77'  => '1g',
+    '79'  => '1g',
 };
 
 my $plan_speed_binding = {
@@ -15,64 +16,27 @@ my $plan_speed_binding = {
     '1g'   => '100000',
 };
 
-# If you couldn’t determine, then the limit will still be issued a limit, you can’t without a limit - on a gigabit link this is fraught
 my $default_speed = "30000";
 
 sub get_speed_by_ctid {
     my $ve = shift;
-
-    # this is a service container on Parallels Cloud Server
-    if ($ve eq '1') {
-        return $default_speed;
-    }
-
-    # Это VE для Repair режима, они хорошие, но их тоже надо лимитировать
-    # Примеры VEID: 10000000, 10000001 ... 
-    if ($ve =~ m/^100000$/) {
-        return $default_speed;
-    }
-
     my $plan_name = '';
-
-    my $memory_limit = get_physpages_limit_for_ct($ve);
-    
-    unless ($memory_limit) {
-        warn "Can't get physpages limit for $ve";
-        return $default_speed;
-    }
-
-    # Конвертируем лимит памяти в мегабайты
-    # my $memory_limit_in_megabytes = $memory_limit * 4096 / 1024 ** 2;
 
     $plan_name = $openvz_plan_binding->{$ve};
 
     unless ($plan_name) {
-        warn "Can't get plan name for $ve \n";
+        warn "no config for ve $ve \n";
         return $default_speed;
     }
 
     my $ve_speed = $plan_speed_binding->{$plan_name};
 
     unless ($ve_speed) {
-        warn "Can't get channel speed for $plan_name for container $ve";
+        warn "no speed defined for plan $plan_name ve $ve \n";
         return $default_speed;
     }
 
     return $ve_speed;
-}
-
-sub get_physpages_limit_for_ct {
-    my $ctid = shift;
-
-    my $physpages_limit_raw = `/usr/sbin/vzlist -H -ophyspages.l $ctid`;
-    chomp $physpages_limit_raw;
-
-    for ($physpages_limit_raw) {
-        s/\s+$//g;
-        s/^\s+//g;
-    }   
-
-    return $physpages_limit_raw;
 }
 
 1;
